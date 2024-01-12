@@ -1,12 +1,15 @@
+import 'dart:ui';
+
 import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import '../elementos/Estrella.dart';
 import '../elementos/Gota.dart';
 import '../players/EmberPlayer.dart';
 
-class MyGame extends FlameGame {
+class MyGame extends FlameGame with HasKeyboardHandlerComponents {
   MyGame()
       : super(
           camera: CameraComponent.withFixedResolution(
@@ -55,5 +58,10 @@ class MyGame extends FlameGame {
       position: Vector2(60, 360),
     );
     world.add(_ember);
+  }
+
+  @override
+  Color backgroundColor() {
+    return const Color.fromARGB(255, 173, 223, 247);
   }
 }
