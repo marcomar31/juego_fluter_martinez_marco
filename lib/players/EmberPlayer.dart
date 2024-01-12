@@ -6,7 +6,7 @@ class EmberPlayer extends SpriteAnimationComponent
     with HasGameReference<MyGame> {
   EmberPlayer({
     required super.position,
-  }) : super(size: Vector2.all(64), anchor: Anchor.center);
+  }) : super(size: Vector2.all(48), anchor: Anchor.center);
 
   @override
   void onLoad() {
