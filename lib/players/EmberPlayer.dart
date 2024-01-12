@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:juego_flutter_martinez_marco/games/MyGame.dart';
 import 'package:flame_forge2d/body_component.dart';
 
+import '../bodies/SueloBody.dart';
+
 class EmberPlayer extends SpriteAnimationComponent
     with HasGameRef<MyGame>, KeyboardHandler {
   int horizontalDirection = 0;
@@ -128,7 +130,7 @@ class EmberPlayerBody extends BodyComponent with KeyboardHandler, ContactCallbac
 
   @override
   Future<void> onLoad() {
-    emberPlayer = EmberPlayer(position: Vector2(0,0),iTipo: iTipo, size: tamano);
+    emberPlayer = EmberPlayer(position: Vector2(0,0),iTipo: iTipo, size: tamano, jugadorPrincipal: jugadorPrincipal);
     add(emberPlayer);
     return super.onLoad();
   }

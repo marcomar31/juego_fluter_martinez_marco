@@ -6,6 +6,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_tiled/flame_tiled.dart';
+import 'package:juego_flutter_martinez_marco/bodies/SueloBody.dart';
 import '../elementos/Estrella.dart';
 import '../elementos/Gota.dart';
 import '../players/EmberPlayer.dart';
@@ -52,9 +53,19 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
 
     for(final gota in gotas!.objects){
       Gota spriteGota = Gota(position: Vector2(gota.x*1.5, gota.y*1.45),
-          size: Vector2(64,64));
+          size: Vector2(64, 64));
       add(spriteGota);
     }
+
+    ObjectGroup? suelos = mapComponent.tileMap.getLayer<ObjectGroup>("sueloCollider");
+
+    for(final tiledObjectTierra in suelos!.objects){
+      SueloBody tierraBody = SueloBody(tiledBody: tiledObjectTierra,
+          scales: Vector2(16, 16));
+      add(tierraBody);
+    }
+
+    //JUGADORES
     _ember1 = EmberPlayerBody(initialPosition: Vector2(168, canvasSize.y - 350),
         iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,100)
     );
@@ -73,3 +84,4 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
     return const Color.fromARGB(255, 173, 223, 247);
   }
 }
+
