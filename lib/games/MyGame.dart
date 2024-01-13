@@ -1,9 +1,6 @@
 import 'dart:ui';
-
-import 'package:flame/camera.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:juego_flutter_martinez_marco/bodies/SueloBody.dart';
@@ -49,7 +46,7 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
       add(spriteStar);
     }
 
-    ObjectGroup? gotas=mapComponent.tileMap.getLayer<ObjectGroup>("gotas");
+    ObjectGroup? gotas = mapComponent.tileMap.getLayer<ObjectGroup>("gotas");
 
     for(final gota in gotas!.objects){
       Gota spriteGota = Gota(position: Vector2(gota.x*1.5, gota.y*1.45),
@@ -59,21 +56,21 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
 
     ObjectGroup? suelos = mapComponent.tileMap.getLayer<ObjectGroup>("sueloCollider");
 
-    for(final tiledObjectTierra in suelos!.objects){
-      SueloBody tierraBody = SueloBody(tiledBody: tiledObjectTierra,
-          scales: Vector2(16, 16));
-      add(tierraBody);
+    for(final tiledObjectSuelo in suelos!.objects){
+      SueloBody sueloBody = SueloBody(tiledBody: tiledObjectSuelo,
+          scales: Vector2(1.50, 1.5));
+      add(sueloBody);
     }
 
     //JUGADORES
-    _ember1 = EmberPlayerBody(initialPosition: Vector2(168, canvasSize.y - 350),
-        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,100)
+    _ember1 = EmberPlayerBody(initialPosition: Vector2(148, canvasSize.y - 450),
+        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,50)
     );
 
     add(_ember1);
 
-    _ember2 = EmberPlayerBody(initialPosition: Vector2(128, canvasSize.y - 350),
-        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,100), jugadorPrincipal: false
+    _ember2 = EmberPlayerBody(initialPosition: Vector2(68, canvasSize.y - 450),
+        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,50), jugadorPrincipal: false
     );
 
     add(_ember2);
