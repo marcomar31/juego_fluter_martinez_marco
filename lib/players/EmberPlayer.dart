@@ -26,14 +26,26 @@ class EmberPlayer extends SpriteAnimationComponent
 
   @override
   void onLoad() {
-    animation = SpriteAnimation.fromFrameData(
-      gameRef.images.fromCache('ember.png'),
-      SpriteAnimationData.sequenced(
-        amount: 4,
-        textureSize: Vector2.all(16),
-        stepTime: 0.12,
-      ),
-    );
+    if (jugadorPrincipal) {
+      animation = SpriteAnimation.fromFrameData(
+        gameRef.images.fromCache('ember1.png'),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          textureSize: Vector2.all(16),
+          stepTime: 0.12,
+        ),
+      );
+    }
+    else {
+      animation = SpriteAnimation.fromFrameData(
+        gameRef.images.fromCache('ember2.png'),
+        SpriteAnimationData.sequenced(
+          amount: 4,
+          textureSize: Vector2.all(16),
+          stepTime: 0.12,
+        ),
+      );
+    }
   }
 
   @override
@@ -109,8 +121,13 @@ class EmberPlayerBody extends BodyComponent with KeyboardHandler, ContactCallbac
 
   @override
   Body createBody() {
-    BodyDef definicionCuerpo= BodyDef(position: initialPosition,
-        type: BodyType.dynamic,angularDamping: 0.8,userData: this);
+    BodyDef definicionCuerpo= BodyDef(
+        position: initialPosition,
+        type: BodyType.dynamic,
+        angularDamping: 0.8,
+        fixedRotation: true,
+        userData: this,
+    );
 
     Body cuerpo= world.createBody(definicionCuerpo);
 

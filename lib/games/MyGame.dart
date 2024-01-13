@@ -28,6 +28,8 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
 
     await images.loadAll([
       'ember.png',
+      'ember1.png',
+      'ember2.png',
       'heart_half.png',
       'heart.png',
       'star.png',
