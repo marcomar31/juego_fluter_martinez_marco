@@ -6,6 +6,7 @@ import 'package:flame_tiled/flame_tiled.dart';
 import 'package:juego_flutter_martinez_marco/bodies/SueloBody.dart';
 import '../elementos/Estrella.dart';
 import '../elementos/Gota.dart';
+import '../elementos/HeartComponent.dart';
 import '../players/EmberPlayer.dart';
 
 class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
@@ -17,8 +18,10 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
           ),
       );
 
-  late EmberPlayerBody  _ember1, _ember2;
+  late EmberPlayerBody  _ember1;
+  late EmberPlayerBody2  _ember2;
   late TiledComponent mapComponent;
+  late HeartComponent heartComponent1, heartComponent2;
 
   @override
   Future<void> onLoad() async {
@@ -68,19 +71,55 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
     _ember1 = EmberPlayerBody(initialPosition: Vector2(148, canvasSize.y - 450),
         iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,50)
     );
+    _ember1.onBeginContact = inicioContactosDelJuego;
 
     add(_ember1);
 
-    _ember2 = EmberPlayerBody(initialPosition: Vector2(68, canvasSize.y - 450),
-        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,50), jugadorPrincipal: false
+    _ember2 = EmberPlayerBody2(initialPosition: Vector2(68, canvasSize.y - 450),
+        iTipo: EmberPlayerBody2.I_PLAYER_TANYA, tamano: Vector2(50,50)
     );
+    //_ember2.onBeginContact = inicioContactosDelJuego;
 
     add(_ember2);
+
+    Image spriteFullHeart = images.fromCache('heart.png');
+    Image spriteHalfHeart = images.fromCache('heart_half.png');
+
+    heartComponent1 = HeartComponent(
+      imageFullHeart: spriteFullHeart,
+      lives: _ember1.iVidas,
+      startX: 50,
+      startY: 100,
+      playerName: "Jugador 1"
+    );
+
+    add(heartComponent1);
+
+    heartComponent2 = HeartComponent(
+      imageFullHeart: spriteFullHeart,
+      lives: _ember2.iVidas,
+      startX: canvasSize.x - 150,
+      startY: 100,
+      playerName: "Jugador 2",
+    );
+
+    add(heartComponent2);
   }
 
   @override
   Color backgroundColor() {
     return const Color.fromARGB(255, 173, 223, 247);
+  }
+
+  void inicioContactosDelJuego(Object objeto, Contact contact) {
+    if (objeto is EmberPlayerBody2) {
+      print("ES CONTACTO DE EMBERBODY2");
+      _ember1.iVidas--;
+      if (_ember1.iVidas == 0) {
+        _ember1.removeFromParent();
+        heartComponent1.render;
+      }
+    }
   }
 }
 
