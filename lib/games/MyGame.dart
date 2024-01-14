@@ -21,7 +21,8 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
   late EmberPlayerBody  _ember1;
   late EmberPlayerBody2  _ember2;
   late TiledComponent mapComponent;
-  late HeartComponent heartComponent1, heartComponent2;
+  late HeartComponent heartComponent1;
+  late HeartComponent2 heartComponent2;
 
   @override
   Future<void> onLoad() async {
@@ -82,25 +83,20 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
 
     add(_ember2);
 
-    Image spriteFullHeart = images.fromCache('heart.png');
-    Image spriteHalfHeart = images.fromCache('heart_half.png');
-
     heartComponent1 = HeartComponent(
-      imageFullHeart: spriteFullHeart,
-      lives: _ember1.iVidas,
-      startX: 50,
-      startY: 100,
-      playerName: "Jugador 1"
+      _ember1,
+      50,
+      100,
+      "Jugador 1"
     );
 
     add(heartComponent1);
 
-    heartComponent2 = HeartComponent(
-      imageFullHeart: spriteFullHeart,
-      lives: _ember2.iVidas,
-      startX: canvasSize.x - 150,
-      startY: 100,
-      playerName: "Jugador 2",
+    heartComponent2 = HeartComponent2(
+      _ember2,
+      canvasSize.x - 150,
+      100,
+      "Jugador 2",
     );
 
     add(heartComponent2);
@@ -117,7 +113,6 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
       _ember1.iVidas--;
       if (_ember1.iVidas == 0) {
         _ember1.removeFromParent();
-        heartComponent1.render;
       }
     }
   }
