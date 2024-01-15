@@ -10,25 +10,30 @@ import '../elementos/HeartComponent.dart';
 import '../players/EmberPlayer.dart';
 
 class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
-  MyGame()
-      : super(
-          cameraComponent: CameraComponent.withFixedResolution(
-          width: 16 * 28,
-          height: 16 * 14,
-          ),
-      );
+  MyGame();
+
+  late TiledComponent mapComponent;
+  late final CameraComponent cameraComponent;
 
   late EmberPlayerBody  _ember1;
   late EmberPlayerBody2  _ember2;
-  late TiledComponent mapComponent;
   late HeartComponent heartComponent1;
   late HeartComponent2 heartComponent2;
 
+  double gameWidth = 1920;
+  double gameHeigth = 1080;
+
+  double wScale = 1.0;
+  double hScale = 1.0;
+
+  @override
+  Color backgroundColor() {
+    return const Color.fromARGB(255, 173, 223, 247);
+  }
+
   @override
   Future<void> onLoad() async {
-    camera.viewfinder
-      ..zoom = 0.35
-      ..anchor = Anchor.topLeft;
+    camera.viewfinder.anchor = Anchor.topLeft;
 
     await images.loadAll([
       'ember.png',
@@ -41,22 +46,29 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
       'nature-platformer-tileset-16x16.png',
     ]);
 
-    mapComponent = await TiledComponent.load('mapa2.tmx', Vector2.all(16));
+    wScale = size.x/gameWidth;
+    hScale = size.y/gameHeigth;
+
+    cameraComponent = CameraComponent(world: world);
+    cameraComponent.viewfinder.anchor = Anchor.topLeft;
+    addAll([cameraComponent, world]);
+
+    mapComponent = await TiledComponent.load('mapa2.tmx', Vector2(16*1.5*wScale, 16*1.5*hScale));
     world.add(mapComponent);
 
     ObjectGroup? estrellas=mapComponent.tileMap.getLayer<ObjectGroup>("estrellas");
 
     for(final estrella in estrellas!.objects) {
-      Estrella spriteStar = Estrella(position: Vector2(estrella.x*1.5, estrella.y*1.45),
-          size: Vector2(64, 64));
+      Estrella spriteStar = Estrella(position: Vector2(estrella.x*wScale*1.5, estrella.y*hScale*1.5),
+          size: Vector2(32*1.5*wScale, 32*1.5*hScale));
       add(spriteStar);
     }
 
     ObjectGroup? gotas = mapComponent.tileMap.getLayer<ObjectGroup>("gotas");
 
     for(final gota in gotas!.objects){
-      Gota spriteGota = Gota(position: Vector2(gota.x*1.5, gota.y*1.45),
-          size: Vector2(64, 64));
+      Gota spriteGota = Gota(position: Vector2(gota.x*wScale*1.5, gota.y*hScale*1.5),
+          size: Vector2(32*1.5*wScale, 32*1.5*hScale));
       add(spriteGota);
     }
 
@@ -64,20 +76,20 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
 
     for(final tiledObjectSuelo in suelos!.objects){
       SueloBody sueloBody = SueloBody(tiledBody: tiledObjectSuelo,
-          scales: Vector2(1.50, 1.5));
+          scales: Vector2(1.5*wScale, 1.5*hScale));
       add(sueloBody);
     }
 
     //JUGADORES
-    _ember1 = EmberPlayerBody(initialPosition: Vector2(148, canvasSize.y - 450),
-        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(50,50)
+    _ember1 = EmberPlayerBody(initialPosition: Vector2(148, canvasSize.y - 350),
+        iTipo: EmberPlayerBody.I_PLAYER_TANYA, tamano: Vector2(64*wScale,64*hScale)
     );
     _ember1.onBeginContact = inicioContactosDelJuego;
 
     add(_ember1);
 
-    _ember2 = EmberPlayerBody2(initialPosition: Vector2(68, canvasSize.y - 450),
-        iTipo: EmberPlayerBody2.I_PLAYER_TANYA, tamano: Vector2(50,50)
+    _ember2 = EmberPlayerBody2(initialPosition: Vector2(68, canvasSize.y - 350),
+        iTipo: EmberPlayerBody2.I_PLAYER_TANYA, tamano: Vector2(64*wScale,64*hScale)
     );
     //_ember2.onBeginContact = inicioContactosDelJuego;
 
@@ -100,11 +112,6 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
     );
 
     add(heartComponent2);
-  }
-
-  @override
-  Color backgroundColor() {
-    return const Color.fromARGB(255, 173, 223, 247);
   }
 
   void inicioContactosDelJuego(Object objeto, Contact contact) {
