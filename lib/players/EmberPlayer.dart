@@ -17,7 +17,7 @@ class EmberPlayer extends SpriteAnimationComponent
 
   @override
   void onLoad() {
-      animation = SpriteAnimation.fromFrameData(
+    animation = SpriteAnimation.fromFrameData(
         gameRef.images.fromCache('ember1.png'),
         SpriteAnimationData.sequenced(
           amount: 4,
@@ -104,6 +104,8 @@ class EmberPlayerBody extends BodyComponent with KeyboardHandler, ContactCallbac
 
   @override
   Future<void> onLoad() {
+    renderBody = false;
+
     emberPlayer = EmberPlayer(position: Vector2(0,0),iTipo: iTipo, size: tamano);
     add(emberPlayer);
     return super.onLoad();
@@ -267,6 +269,8 @@ class EmberPlayerBody2 extends BodyComponent with KeyboardHandler, ContactCallba
 
   @override
   Future<void> onLoad() {
+    renderBody = false;
+
     emberPlayer = EmberPlayer2(position: Vector2(0,0),iTipo: iTipo, size: tamano);
     add(emberPlayer);
     return super.onLoad();

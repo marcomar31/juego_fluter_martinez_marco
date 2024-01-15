@@ -33,6 +33,7 @@ class GotaBody extends BodyComponent<MyGame> with ContactCallbacks{
 
   @override
   Future<void> onLoad() async{
+    renderBody = false;
     await super.onLoad();
 
     Vector2 gotaPosition = Vector2(tamanoPred * tamano-12, 0);
