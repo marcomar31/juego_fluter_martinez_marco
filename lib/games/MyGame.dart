@@ -4,8 +4,8 @@ import 'package:flame/events.dart';
 import 'package:flame_forge2d/flame_forge2d.dart';
 import 'package:flame_tiled/flame_tiled.dart';
 import 'package:juego_flutter_martinez_marco/bodies/SueloBody.dart';
+import '../bodies/GotaBody.dart';
 import '../elementos/Estrella.dart';
-import '../elementos/Gota.dart';
 import '../elementos/HeartComponent.dart';
 import '../players/EmberPlayer.dart';
 
@@ -67,9 +67,9 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
     ObjectGroup? gotas = mapComponent.tileMap.getLayer<ObjectGroup>("gotas");
 
     for(final gota in gotas!.objects){
-      Gota spriteGota = Gota(position: Vector2(gota.x*wScale*1.5, gota.y*hScale*1.5),
-          size: Vector2(32*1.5*wScale, 32*1.5*hScale));
-      add(spriteGota);
+      GotaBody gotaBody = GotaBody(posicion: Vector2(gota.x*wScale,gota.y*hScale),
+          escala: Vector2(32*1.5*wScale,32*1.5*hScale), tamano: wScale);
+      add(gotaBody);
     }
 
     ObjectGroup? suelos = mapComponent.tileMap.getLayer<ObjectGroup>("sueloCollider");
@@ -91,7 +91,7 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
     _ember2 = EmberPlayerBody2(initialPosition: Vector2(68, canvasSize.y - 350),
         iTipo: EmberPlayerBody2.I_PLAYER_TANYA, tamano: Vector2(64*wScale,64*hScale)
     );
-    //_ember2.onBeginContact = inicioContactosDelJuego;
+    _ember2.onBeginContact = inicioContactosDelJuego2;
 
     add(_ember2);
 
@@ -115,11 +115,19 @@ class MyGame extends Forge2DGame with HasKeyboardHandlerComponents {
   }
 
   void inicioContactosDelJuego(Object objeto, Contact contact) {
-    if (objeto is EmberPlayerBody2) {
-      print("ES CONTACTO DE EMBERBODY2");
+    if(objeto is GotaBody){
       _ember1.iVidas--;
-      if (_ember1.iVidas == 0) {
+      if(_ember1.iVidas==0){
         _ember1.removeFromParent();
+      }
+    }
+  }
+
+  void inicioContactosDelJuego2(Object objeto, Contact contact) {
+    if(objeto is GotaBody){
+      _ember2.iVidas--;
+      if(_ember2.iVidas==0){
+        _ember2.removeFromParent();
       }
     }
   }
